@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <title>환자 상세</title>
+</head>
+<body>
+  <form class="detail-container" th:action="@{|/patients/${patient.id}|}" th:object="${patient}" method="post">
+    <div class="info-group">
+      <p class="info-label">환자 상세 페이지</p>
+      <a th:href="@{/patients}" class="btn btn-link">목록으로</a>
+      
+      <button type="button" id="update" class="btn btn-info">수정</button>
+      <button type="submit" id="save" class="btn btn-save btn-hide">저장</button>
+      <button type="submit" 
+              formaction="/patients/1/delete" 
+              onclick="return confirm('정말 삭제하시겠습니까?')"
+              id="delete" 
+              class="btn btn-del">삭제</button>
+    </div>
+
+    <div class="info-group">
+      <label class="info-label" for="name">이름</label>
+      <input type="text" class="view-mode" th:field="*{name}" readonly/>
+    </div>
+
+    <div class="info-group">
+      <label class="info-label" for="birth">생년월일</label>
+      <input type="text" class="view-mode" th:field="*{birth}" readonly/>
+    </div>
+
+    <div class="info-group">
+      <div class="gender-group">
+        <p class="info-label">성별</p>
+        <input type="radio" class="view-mode" th:field="*{gender}" value="male" disabled/>
+        <label for="gender1">남성</label>
+        <input type="radio" class="view-mode" th:field="*{gender}" value="female" disabled/>
+        <label for="gender2">여성</label>
+        <input type="radio" class="view-mode" th:field="*{gender}" value="other" disabled/>
+        <label for="gender3">기타</label>
+      </div>
+    </div>
+
+    <div class="info-group">
+      <label class="info-label" for="cn">진료 내용(증상)</label>
+      <input type="text" class="view-mode" th:field="*{cn}" readonly/>
+    </div>
+  </form>
+
+  <script>
+    const btnUpdate = document.getElementById('update');
+    const btnSave = document.getElementById('save');
+    
+    btnUpdate.addEventListener('click', function() {
+      const viewModeInputs = document.querySelectorAll('.view-mode');
+      
+      viewModeInputs.forEach(input => {
+        // 일반 텍스트 입력창 처리
+        input.readOnly = false;
+        
+        // 라디오 버튼이나 체크박스는 disabled를 풀어줘야 함
+        if(input.type === 'radio') {
+            input.disabled = false;
+        }
+
+        input.classList.remove('view-mode');
+        input.classList.add('edit-mode');
+      });
+
+      // 버튼 제어
+      btnSave.classList.remove('btn-hide'); // 저장 버튼 보이기
+      btnUpdate.classList.add('btn-hide');  // 수정 버튼 숨기기
+    });
+  </script>
+</body>
+</html>

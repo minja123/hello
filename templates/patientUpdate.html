@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+  <title>환자 상세</title>
+</head>
+<body>
+  <div class="detail-container">
+    <div class="info-group">
+      <p class="info-label">환자 수정 페이지</p>
+    </div>
+    <div class="info-group">
+      <label class="info-label" for="name">이름</label>
+      <input type="text" id="name" name="name" th:field="${patient.name}" readonly/>
+    </div>
+    <div class="info-group">
+      <label class="info-label" for="birth">생년월일</label>
+      <input type="text" id="birth" name="birth" th:field="${patient.birth}" readonly/>
+    </div>
+    <div class="info-group">
+      <div class="gender-group">
+        <p class="info-label">성별<p>
+        <input type="radio" name="gender" id="male" value="male" th:field="${patient.gender}" disabled/>
+        <label for="male">남성</label>
+        <input type="radio" name="gender" id="female" value="female" th:field="${patient.gender}" disabled/>
+        <label for="female">여성</label>
+        <input type="radio" name="gender" id="other" value="other" th:field="${patient.gender}" disabled/>
+        <label for="other">기타</label>
+      </div>
+    </div>
+    <div class="info-group">
+      <label class="info-label" for="cn">진료 내용(증상)</label>
+      <input type="text" id="cn" name="cn" th:field="${patient.cn}"/>
+    </div>
+  </div>
+</body>
+</html>
