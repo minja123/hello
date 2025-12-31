@@ -11,7 +11,10 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* 부드러운 그림자 */
     margin-bottom: 25px;
     border: 1px solid #e9ecef;
-    flex-wrap: wrap; /* 화면이 좁아지면 아래로 흐르게 */
+
+    /* 핵심 수정: 줄바꿈 방지 */
+    flex-wrap: nowrap; 
+    overflow-x: auto; /* 화면이 아주 작아질 경우에만 가로 스크롤 */
 }
 
 /* 2. 입력 필드 공통 (input, select) */
@@ -26,21 +29,27 @@
     outline: none;
 }
 
+.search-filter-container select {
+    width: 120px;
+    flex-shrink: 0;
+}
+
 /* 3. 포커스 시 강조 효과 */
 .search-filter-container input:focus,
 .search-filter-container select:focus {
     border-color: #4dabf7;
-    box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.15);
+    box-shadow: 0 0 0 3px rgba(37, 139, 223, 0.15);
 }
 
 /* 4. 이름 검색창만 조금 더 길게 */
 .search-input-name {
-    min-width: 200px;
-    flex-grow: 1; /* 남는 공간을 차지하게 */
+    width: 180px; /* 고정 너비 혹은 적절한 너비 설정 */
+    flex-shrink: 0; /* 공간이 부족해도 줄어들지 않음 */
 }
 
 /* 5. 날짜 입력창 스타일 */
 .date-input {
+    width: 150px; /* 날짜창 너비 고정 */
     cursor: pointer;
     background-color: #f8f9fa;
 }
