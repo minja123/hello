@@ -1,30 +1,114 @@
 @import url("button.css");
 
-.simple-table {
-	width: 100%;
-	border-collapse: collapse; /* 테두리 중첩 제거 */
-	margin: 20px 0;
-	font-family: 'Pretendard', sans-serif;
+/* 1. 필터 컨테이너 전체 */
+.search-filter-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* 부드러운 그림자 */
+    margin-bottom: 25px;
+    border: 1px solid #e9ecef;
+    flex-wrap: wrap; /* 화면이 좁아지면 아래로 흐르게 */
 }
 
-.simple-table th {
-	background-color: #f8f9fa; /* 연한 회색 배경 */
-	color: #333;
-	font-weight: 600;
-	padding: 12px 15px; /* 상하 좌우 안쪽 여백 */
-	border-bottom: 2px solid #dee2e6; /* 테두리 중첩 제거 */
-	text-align: left;
+/* 2. 입력 필드 공통 (input, select) */
+.search-filter-container input,
+.search-filter-container select {
+    padding: 10px 14px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #495057;
+    transition: all 0.2s ease-in-out;
+    outline: none;
 }
 
-.simple-table td {
-	padding: 12px 15px;
-	border-bottom: 1px solid #eee; /* 가느다란 구분선 */
-	color: #555;
+/* 3. 포커스 시 강조 효과 */
+.search-filter-container input:focus,
+.search-filter-container select:focus {
+    border-color: #4dabf7;
+    box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.15);
 }
 
-.simple-table tbody tr:hover {
-	background-color: #f1f3f5; /* 마우스 호버 효과 */
+/* 4. 이름 검색창만 조금 더 길게 */
+.search-input-name {
+    min-width: 200px;
+    flex-grow: 1; /* 남는 공간을 차지하게 */
 }
+
+/* 5. 날짜 입력창 스타일 */
+.date-input {
+    cursor: pointer;
+    background-color: #f8f9fa;
+}
+
+/* 6. 초기화 버튼 */
+.btn-reset {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+    transition: all 0.2s;
+}
+
+.btn-reset:hover {
+    background-color: #e9ecef;
+    color: #343a40;
+}
+
+/* 테이블 컨테이너 */
+.table-container {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* 테이블 스타일 */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.custom-table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    padding: 12px;
+    border-bottom: 2px solid #dee2e6;
+    text-align: left;
+}
+
+.custom-table td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+/* 마우스 호버 효과 */
+.custom-table tbody tr:hover {
+    background-color: #f1f3f5;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* 성별 배지 스타일 */
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+.badge-male { background: #e7f5ff; color: #1971c2; }
+.badge-female { background: #fff0f6; color: #d6336c; }
 
 .info-group {
   display: flex;
@@ -40,178 +124,71 @@
 }
 
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* 검은색 배경에 60% 투명도 */
-  z-index: 999; /* 화면 최상단으로 */
-  
-  /* 가운데 정렬 핵심 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* 모달창 */
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 750px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
-.modal-body { margin-top: 15px; }
-.close-btn { cursor: pointer; border: none; background: none; font-size: 20px; }
-
-.simple-form {
-	background-color: #fff;
-	max-width: 400px;
-	width: 90%;
-	padding: 20px;
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
-	position: relative;
-}
-
-.form-group {
-	margin-bottom: 15px;
-}
-
-.form-group label {
-	display: block;
-	margin-bottom: 5px;
-	font-size: 14px;
-	font-weight: bold;
-}
-
-.form-group input, .form-group textarea {
-	width: 100%;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box; /* 패딩 포함 너비 계산 */
-	transition: border-color 0.3s;
-}
-
-/* 입력창 클릭 시(Focus) 스타일 */
-.form-group input:focus, .form-group textarea:focus {
-	outline: none;
-	border-color: #007bff;
-	box-shadow: 0 0 5px rgba(0,123,255,0.2);
-}
-
-.label-title {
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.gender-group {
-  display: flex;
-  gap: 10px; /* 버튼 사이 간격 */
-}
-
-/* 기본 라디오 버튼 숨기기 */
-.gender-group input[type="radio"] {
-  display: none;
-}
-
-/* 버튼 스타일 (Label) */
-.gender-group label {
-  flex: 1; /* 가로 길이를 동일하게 배분 */
-  text-align: center;
-  padding: 12px 0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  cursor: pointer;
-  background-color: #fff;
-  color: #666;
-  transition: all 0.2s ease;
-  font-size: 15px;
-}
-
-/* 마우스를 올렸을 때 (Hover) */
-.gender-group label:hover {
-  background-color: #f8f9fa;
-  border-color: #ccc;
-}
-
-/* 선택되었을 때 스타일 (Checked) */
-.gender-group input[type="radio"]:checked + label {
-  background-color: #007bff; /* 포인트 컬러 */
-  color: #fff;
-  border-color: #007bff;
-  font-weight: bold;
-}
-
-
-/* 폼 안의 버튼 레이아웃 */
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.close-btn {
-  flex: 1;
-  background: #eee;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.submit-btn {
-	flex: 2; /* 저장 버튼을 더 길게 */
-	padding: 12px;
-	background-color: #007bff;
-	color: white;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	font-size: 16px;
-}
-
-.close-btn:hover {
-	background-color: #eaa;
-}
-
-.submit-btn:hover {
-	background-color: #0056b3;
-}
-
-.field-error {
-	border: 1px solid red;
-}
-
-.search-container {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-}
-
-.search-form {
+    /* 1. 화면에 고정: 스크롤을 내려도 항상 그 자리에 있음 */
+    position: fixed;
+    
+    /* 2. 화면 전체를 덮음: 0,0 지점부터 시작해서 너비/높이 100% */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* 3. 배경 어둡게: 뒤쪽의 리스트와 분리된 느낌을 줌 */
+    background: rgba(0, 0, 0, 0.5);
+    
+    /* 4. 중앙 정렬: 내부의 .modal-content를 화면 정중앙에 배치 */
     display: flex;
-    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    
+    /* 5. 우선순위: 다른 요소들보다 위에 떠 있어야 함 */
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    width: 500px;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    background: #f8f9fa;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
-.search-input {
-    flex-grow: 1; /* 검색창이 남은 공간을 다 차지하도록 */
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    outline: none;
+.modal-body {
+    padding: 25px;
 }
 
-.search-input:focus {
-    border-color: #17a2b8; /* 강조색 */
+.info-group {
+    margin-bottom: 15px;
+}
+
+.info-group label {
+    display: block;
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+/* 입력창 포커스 효과 */
+.form-control:focus {
+    border-color: #4dabf7;
+    box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
+    outline: none;
 }
 
 /* 페이징 컨테이너 정렬 */

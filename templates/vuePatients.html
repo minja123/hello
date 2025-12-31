@@ -12,32 +12,49 @@
   <div id="app" class="container">
 		<h2>환자 목록 (Vue.js 버전)</h2>
 
-		<div class="search-container">
-			<input class="search-input" type="text" v-model="searchName" @input="loadPage(0)" placeholder="이름으로 검색...">
+		<div class="search-filter-container" style="display: flex; gap: 10px; margin-bottom: 20px;">
+			<input type="text" class="search-input-name" v-model="searchCond.name" @input="onSearch" placeholder="이름 검색...">
+
+			<select v-model="searchCond.gender" @change="onSearch" class="form-select">
+				<option value="">성별 전체</option>
+				<option value="male">남성</option>
+				<option value="female">여성</option>
+			</select>
+
+			<input type="date" class="date-input" v-model="searchCond.startDate" @change="onSearch">
+			<span>~</span>
+			<input type="date" class="date-input" v-model="searchCond.endDate" @change="onSearch">
+
+			<button @click="resetFilters" class="btn btn-reset">초기화</button>
 		</div>
 
-		<table class="simple-table">
-			<thead>
-				<tr>
-					<th>ID</th><th>이름</th><th>생년월일</th><th>성별</th><th>설명</th>
-					<!-- <th>상세보기</th>	 -->
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="p in patients" :key="p.id">
-					<td>{{ p.id }}</td>
-					<td><a href="javascript:void(0);" @click="showDetail(p.id)">{{ p.name }}</a></td>
-					<!-- <td><a @click="showDetail(p.id)">{{ p.name }}</a></td> -->
-					<td>{{ p.birth }}</td>
-					<td>{{ p.gender === 'male' ? '남성' : '여성'}}</td>
-					<td>{{ p.cn }}</td>
-					<!-- <td>서비스 준비 중</td> -->
-				</tr>
-				<tr v-if="patients.length === 0">
-					<td colspan="4">검색 결과가 없습니다.</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="table-container">
+			<table class="custom-table">
+				<thead>
+					<tr>
+						<th>ID</th><th>이름</th><th>생년월일</th><th>성별</th><th>설명</th>
+						<!-- <th>상세보기</th>	 -->
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="p in patients" :key="p.id">
+						<td>{{ p.id }}</td>
+						<td><a href="javascript:void(0);" @click="showDetail(p.id)">{{ p.name }}</a></td>
+						<!-- <td><a @click="showDetail(p.id)">{{ p.name }}</a></td> -->
+						<td>{{ p.birth }}</td>
+						<td v-if="p.gender === 'male'"><span class="badge badge-male">남성</span></td>
+						<td v-else><span class="badge badge-female">여성</span></td>
+						<td>{{ p.cn }}</td>
+						<!-- <td>서비스 준비 중</td> -->
+					</tr>
+					<tr v-if="patients.length === 0">
+						<td colspan="4">검색 결과가 없습니다.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		
 
 		<nav class="pagination-container">
         <ul class="pagination">
@@ -144,7 +161,8 @@
 					editForm: null,        // 수정용 복사본 데이터
 					isEditing: false, // 현재 수정 모드인지 여부
 					selectedFile: null,  // 선택된 파일 객체
-        	imagePreview: null   // 미리보기용 URL
+        	imagePreview: null,   // 미리보기용 URL
+					searchCond: this.getInitialSearchCond(), //초기값 설정
 				}
 			},
 			computed: {
@@ -158,9 +176,45 @@
         }
 			},
 			methods: {
+				//초기 검색 조건을 반환하는 함수
+				getInitialSearchCond() {
+					return {
+						name: '',
+						gender: '',
+						startDate: '',
+						endDate: '',
+					}
+				},
+
+				resetFilters() {
+					//객체 전체를 초기화 함수 결과값으로 교체
+					this.searchCond = this.getInitialSearchCond();
+
+					//초기화 후 첫 페이지 목록을 다시 불러옴
+					this.onSearch();
+				},
+
+				// 검색 조건이 바뀔 때마다 호출
+				async onSearch() {
+					this.currentPage = 0; //검색 시 첫 페이지로 리셋
+					await this.loadPage(0);
+				},
+
 				async loadPage(pageNumber) {
+					//1. searchCon의 복사본 filter 작성
+					const filter = { ...this.searchCond }
+
+					//2.날짜형식 데이터 하이픈(-) 제거
+					if (filter.startDate) filter.startDate = filter.startDate.replace(/-/g, '');
+					if (filter.endDate) filter.endDate = filter.endDate.replace(/-/g, '');
+
+					const params = new URLSearchParams({
+						page: pageNumber,
+						...filter //객체 전개 연산자로 name, gender 등을 한꺼번에 포함
+					});
+					
 					try {
-                const response = await fetch(`http://localhost:8080/api/patients?page=${pageNumber}&searchName=${this.searchName}`);
+                const response = await fetch(`http://localhost:8080/api/patients?${params.toString()}`);
                 const data = await response.json();
 
                 // 데이터를 갈아끼우기만 하면 화면은 Vue가 알아서 다시 그립니다 (반응성)
