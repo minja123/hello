@@ -122,6 +122,8 @@
 							<div v-for="m in selectedPatient.memos" :key="m.id" class="memo-item" style="border-bottom: 1px solid #eee; padding: 5px 0;">
 									<small class="text-muted">{{ m.createdDate }}</small>
 									<p style="margin: 0;">{{ m.content }}</p>
+									<button @click="editMemo(m.id, m.content)" class="btn btn-link btn-sm">수정</button>
+									<button @click="removeMemo(m.id)" class="btn btn-danger btn-sm">삭제</button>
 							</div>
 							<div v-if="!selectedPatient.memos || selectedPatient.memos.length === 0" class="text-center text-muted">
 									작성된 메모가 없습니다.
@@ -214,6 +216,35 @@
 						endDate: endDate,
 					}
 				},
+				
+				async editMemo(memoId, oldContent) {
+					console.log(memoId);
+					console.log(oldContent);
+
+					const newContent = prompt("메모를 수정하세요:", oldContent);
+
+					//사용자가 취소를 누르거나 빈 값을 입력했을 때 처리
+					if (newContent === null) return;
+					if (newContent.trim() === "") return alert("내용을 입력해주세요.");
+					if (newContent === oldContent) return;
+
+					try {
+						const response = await fetch(`http://localhost:8080/api/memos/${memoId}`, {
+							method: "PUT",
+							headers: {'Content-Type' : 'application/json'},
+							body: JSON.stringify({ content: newContent})
+						});
+
+						if (response.ok) {
+							alert("수정되었습니다.");
+							const updatedDetail = await response.json();
+							this.selectedPatient = updatedDetail;
+						}
+
+					} catch(error) {
+						console.error("수정 실패:", error);
+					}
+				},
 
 				resetFilters() {
 					//객체 전체를 초기화 함수 결과값으로 교체
@@ -246,6 +277,29 @@
 					} catch (error) {
 						console.error(error);
 					}
+				},
+
+				async removeMemo(memoId) {
+					if(!confirm("현재 메모를 삭제하시겠습니까?")) {
+						return;
+					}
+
+					try {
+						const response = await fetch(`http://localhost:8080/api/memos/${memoId}`, {
+							method: "DELETE",
+						})
+
+
+						if(response.ok) {
+							alert("삭제되었습니다.");
+							const updatedDetail = await response.json();
+							this.selectedPatient = updatedDetail;
+						}
+
+					} catch(error) {
+						console.error(error);
+					}
+					
 				},
 
 
